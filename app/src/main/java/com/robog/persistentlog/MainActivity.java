@@ -50,20 +50,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private final Runnable mCacheRunnable = new Runnable() {
-        @Override
-        public void run() {
-            final int size = SLog.cacheSize();
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ((TextView) findViewById(R.id.tv_cache_size)).setText("缓存数据: " + size);
-                }
-            });
-            mCacheHandler.postDelayed(this, 500);
-        }
-    };
-
     private final Runnable mFileRunnable = new Runnable() {
         @Override
         public void run() {
@@ -76,6 +62,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             mFileHandler.postDelayed(this, 500);
+        }
+    };
+
+    private final Runnable mCacheRunnable = new Runnable() {
+        @Override
+        public void run() {
+            final int size = SLog.cacheSize();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ((TextView) findViewById(R.id.tv_cache_size)).setText("缓存数据: " + size);
+                }
+            });
+            mCacheHandler.postDelayed(this, 500);
         }
     };
 
@@ -163,7 +163,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mCacheHandler.removeCallbacks(mCacheRunnable);
         mDbHandler.removeCallbacks(mDbRunnable);
+        mFileHandler.removeCallbacks(mFileRunnable);
+        mCacheHandler.removeCallbacks(mCacheRunnable);
     }
 }
