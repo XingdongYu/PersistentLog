@@ -3,12 +3,12 @@
 
 Demo演示
 ---
-![image](https://github.com/XingdongYu/PersistentLog/master/art/sample.gif)
+![image](https://github.com/XingdongYu/PersistentLog/tree/master/art/sample.gif)
 
 数据库
 ---
-![image](https://github.com/XingdongYu/PersistentLog/master/art/database.png)
+![image](https://github.com/XingdongYu/PersistentLog/tree/master/art/database.png)
 
 内存占用
 ---
-![image](https://github.com/XingdongYu/PersistentLog/master/art/memory.png)
+![image](https://github.com/XingdongYu/PersistentLog/tree/master/art/memory.png)
