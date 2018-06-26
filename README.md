@@ -5,7 +5,7 @@ Demo演示
 ---
 ![image](https://github.com/XingdongYu/PersistentLog/master/art/sample.gif)
 
-数据库数据
+数据库
 ---
 ![image](https://github.com/XingdongYu/PersistentLog/master/art/database.png)
 
