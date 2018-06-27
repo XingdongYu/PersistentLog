@@ -21,7 +21,7 @@ import static com.robog.loglib.SLog.TAG;
 final class DatabaseLog extends AbstractLog implements Savable {
 
     private final LogBeanDao mLogBeanDao;
-    private final DatabaseThresholdWatchDog mDatabaseWatchDog;
+    private DatabaseThresholdWatchDog mDatabaseWatchDog;
     private static DatabaseLog INSTANCE = null;
 
     public static DatabaseLog create(Context context){
@@ -47,6 +47,7 @@ final class DatabaseLog extends AbstractLog implements Savable {
     public void destroy() {
         INSTANCE = null;
         mDatabaseWatchDog.interrupt();
+        mDatabaseWatchDog = null;
     }
 
     @Override
