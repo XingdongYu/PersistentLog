@@ -3,11 +3,8 @@ package com.robog.persistentlog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.robog.loglib.LogConfig;
 import com.robog.loglib.SLog;
@@ -17,13 +14,8 @@ import com.robog.loglib.SLog;
  */
 public class LogService extends Service {
 
-    private static final String TAG = "LogService";
+    private static final int SERVICE_CHECK_INTERVAL = 60 * 60 * 1000;
     private CheckServiceStateThread mCheckServiceStateThread;
-
-    public interface CheckFunction {
-
-        void apply();
-    }
 
     public static void init(Context context) {
         init(context, new LogConfig.Builder().build());
@@ -34,30 +26,17 @@ public class LogService extends Service {
         context.startService(new Intent(context, LogService.class));
     }
 
-    public static void bind(Context context, LogConfig logConfig, ServiceConnection connection) {
-        SLog.init(context, logConfig);
-        context.bindService(new Intent(context, LogService.class), connection, Context.BIND_AUTO_CREATE);
-    }
-
-    public class InnerBinder extends Binder {
-
-        public void checkService(CheckFunction f) {
-            onServiceCheck(f);
-        }
-    }
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        mCheckServiceStateThread = new CheckServiceStateThread();
-        mCheckServiceStateThread.start();
-        return new InnerBinder();
+        return null;
     }
 
-    private void onServiceCheck(CheckFunction f) {
-        if (mCheckServiceStateThread != null) {
-            mCheckServiceStateThread.setCheckFunction(f);
-        }
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        mCheckServiceStateThread = new CheckServiceStateThread();
+        mCheckServiceStateThread.start();
+        return super.onStartCommand(intent, flags, startId);
     }
 
     /**
@@ -65,12 +44,6 @@ public class LogService extends Service {
      * 具体可跟后台约定
      */
     static class CheckServiceStateThread extends Thread {
-
-        private CheckFunction mCheckFunction;
-
-        private void setCheckFunction(CheckFunction checkFunction) {
-            mCheckFunction = checkFunction;
-        }
 
         private CheckServiceStateThread() {
             super("Log Checker");
@@ -81,10 +54,9 @@ public class LogService extends Service {
         public void run() {
             while (true) {
                 try {
-                    if (mCheckFunction != null) {
-                        mCheckFunction.apply();
-                    }
-                    Thread.sleep(SLog.sServiceCheckInterval);
+                    // 与后台交互
+
+                    Thread.sleep(SERVICE_CHECK_INTERVAL);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     break;

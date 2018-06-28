@@ -10,7 +10,6 @@ public final class LogConfig {
     private final int mDbThreshold;
     private final int mCacheSize;
     private final int mLogMode;
-    private final int mServiceCheckInterval;
     private final int mDbCheckInterval;
 
     public LogConfig(Builder builder) {
@@ -19,7 +18,6 @@ public final class LogConfig {
         mDbThreshold = builder.dbThreshold;
         mCacheSize = builder.cacheSize;
         mLogMode = builder.logMode;
-        mServiceCheckInterval = builder.serviceCheckInterval;
         mDbCheckInterval = builder.dbCheckInterval;
     }
 
@@ -43,10 +41,6 @@ public final class LogConfig {
         return mLogMode;
     }
 
-    public int serviceCheckInterval() {
-        return mServiceCheckInterval;
-    }
-
     public int dbCheckInterval() {
         return mDbCheckInterval;
     }
@@ -58,7 +52,6 @@ public final class LogConfig {
          */
         private static final int DB_THRESHOLD = 1000;
         private static final int MAX_CACHE_SIZE = 50;
-        private static final int SERVICE_CHECK_INTERVAL = 60 * 60 * 1000;
         private static final int DB_CHECK_INTERVAL = 60 * 60 * 1000;
 
         boolean debug;
@@ -66,7 +59,6 @@ public final class LogConfig {
         int dbThreshold = DB_THRESHOLD;
         int cacheSize = MAX_CACHE_SIZE;
         int logMode = LogMode.DATABASE;
-        int serviceCheckInterval = SERVICE_CHECK_INTERVAL;
         int dbCheckInterval = DB_CHECK_INTERVAL;
 
         /**
@@ -121,17 +113,6 @@ public final class LogConfig {
          */
         public Builder logMode(@LogMode.Check int logMode) {
             this.logMode = logMode;
-            return this;
-        }
-
-        /**
-         * 向服务器发送数据周期
-         *
-         * @param serviceCheckInterval
-         * @return
-         */
-        public Builder serviceCheckInterval(int serviceCheckInterval) {
-            this.serviceCheckInterval = serviceCheckInterval;
             return this;
         }
 

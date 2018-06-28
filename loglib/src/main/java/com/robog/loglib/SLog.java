@@ -16,7 +16,6 @@ import static com.robog.loglib.Util.wrapLogBean;
  * Created by yuxingdong on 2018/6/21.
  * <p>
  * 需要权限:
- * <li>{@link android.Manifest.permission#INTERNET}
  * <li>{@link android.Manifest.permission#WRITE_EXTERNAL_STORAGE}
  * <li>{@link android.Manifest.permission#READ_EXTERNAL_STORAGE}
  * <p/>
@@ -37,7 +36,6 @@ public final class SLog {
 
     public static boolean sDebug;
     public static String sDeviceInfo;
-    public static int sServiceCheckInterval;
     public static int sDbCheckInterval;
     public static int sDbThreshold;
     public static int sLogMode;
@@ -52,7 +50,6 @@ public final class SLog {
 
         sDebug = logConfig.debug();
         sDeviceInfo = logConfig.deviceInfo();
-        sServiceCheckInterval = logConfig.serviceCheckInterval();
         sDbCheckInterval = logConfig.dbCheckInterval();
         sDbThreshold = logConfig.dbThreshold();
         sLogMode = logConfig.logMode();

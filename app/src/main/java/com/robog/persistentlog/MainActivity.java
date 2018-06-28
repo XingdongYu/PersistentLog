@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.robog.loglib.LogMode;
 import com.robog.loglib.database.LogBeanDao;
@@ -31,51 +30,31 @@ public class MainActivity extends AppCompatActivity {
     static final String FILE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath()
             + File.separator + "slog.txt";
 
-    private final Handler mDbHandler = new Handler();
-    private final Handler mFileHandler = new Handler();
-    private final Handler mCacheHandler = new Handler();
+    private final Handler mCheckHandler = new Handler();
 
-    private final Runnable mDbRunnable = new Runnable() {
+    private final Runnable mCheckRunnable = new Runnable() {
         @Override
         public void run() {
+            // 缓存大小
+            final int cacheSize = SLog.cacheSize();
+
+            //数据库大小
             final LogBeanDao logBeanDao = LogBeanDaoImpl.getInstance(getApplicationContext());
-            final int size = logBeanDao.getAll().size();
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ((TextView) findViewById(R.id.tv_db_size)).setText("数据库数据: " + size);
-                }
-            });
-            mDbHandler.postDelayed(this, 500);
-        }
-    };
+            final int dbSize = logBeanDao.getAll().size();
 
-    private final Runnable mFileRunnable = new Runnable() {
-        @Override
-        public void run() {
+            // 文件大小
             final File file = new File(FILE_PATH);
-            final long length = file.exists() ? file.length() : 0;
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ((TextView) findViewById(R.id.tv_file_size)).setText("文件大小: " + length);
-                }
-            });
-            mFileHandler.postDelayed(this, 500);
-        }
-    };
+            final long fileLength = file.exists() ? file.length() : 0;
 
-    private final Runnable mCacheRunnable = new Runnable() {
-        @Override
-        public void run() {
-            final int size = SLog.cacheSize();
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ((TextView) findViewById(R.id.tv_cache_size)).setText("缓存数据: " + size);
+                    ((TextView) findViewById(R.id.tv_cache_size)).setText("缓存数据: " + cacheSize);
+                    ((TextView) findViewById(R.id.tv_db_size)).setText("数据库数据: " + dbSize);
+                    ((TextView) findViewById(R.id.tv_file_size)).setText("文件大小: " + fileLength);
                 }
             });
-            mCacheHandler.postDelayed(this, 500);
+            mCheckHandler.postDelayed(this, 500);
         }
     };
 
@@ -116,9 +95,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mDbHandler.post(mDbRunnable);
-        mFileHandler.post(mFileRunnable);
-        mCacheHandler.post(mCacheRunnable);
+        mCheckHandler.post(mCheckRunnable);
     }
 
     public void clear(View view) {
@@ -163,8 +140,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mDbHandler.removeCallbacks(mDbRunnable);
-        mFileHandler.removeCallbacks(mFileRunnable);
-        mCacheHandler.removeCallbacks(mCacheRunnable);
+        mCheckHandler.removeCallbacks(mCheckRunnable);
     }
 }
