@@ -40,6 +40,7 @@ public void uncaughtException(Thread thread, Throwable t) {
 
 Demo演示
 ------
+新建100个线程、每个线程打印4条日志的测试数据:
 
 ![image](https://github.com/XingdongYu/PersistentLog/blob/master/art/sample.gif)
 
