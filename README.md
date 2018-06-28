@@ -3,19 +3,11 @@
 
 流程图
 ---
-```flow
-st=>start: SLog.i
-ed=>end: 结束
-op1=>operation: 存入缓存
-op2=>operation: 存入数据库
-op3=>operation: 清除缓存
-op4=>operation: 清除超过阈值旧数据
-cond1=>condition: 缓存数据大于阈值?
-cond2=>condition: 数据库数据大于阈值?
-
-st->op1->cond1
-cond1(yes)->op2->op3->ed
-cond1(no)->ed
+```mermaid
+A(SLog.i)-->B|存入缓存|
+B-->C{缓存大于阈值?}
+C-->|是|D|存入数据库|-->Z(结束)
+C-->|否|Z(结束)
 ```
 
 使用
