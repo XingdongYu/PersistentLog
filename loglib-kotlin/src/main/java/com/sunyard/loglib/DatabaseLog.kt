@@ -18,7 +18,6 @@ internal class DatabaseLog private constructor(
     init {
 
         logBeanDao = LogBeanDaoImpl.getInstance(context)
-
         databaseWatchDog = DatabaseThresholdWatchDog(logBeanDao)
         databaseWatchDog!!.start()
 
@@ -43,7 +42,7 @@ internal class DatabaseLog private constructor(
     }
 
     internal class DatabaseThresholdWatchDog(
-            private val mLogBeanDao: LogBeanDao
+            private val innerLogBeanDao: LogBeanDao
     ) : Thread("Check database thread") {
 
         init {
@@ -59,8 +58,7 @@ internal class DatabaseLog private constructor(
                     e.printStackTrace()
                     break
                 }
-
-                mLogBeanDao.checkThreshold()
+                innerLogBeanDao.checkThreshold()
             }
         }
     }

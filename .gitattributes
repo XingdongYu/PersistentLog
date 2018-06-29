@@ -1,0 +1,3 @@
+*.html linguist-language=Kotlin
+*.css linguist-language=Kotlin
+*.js linguist-language=Kotlin

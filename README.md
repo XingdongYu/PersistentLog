@@ -19,12 +19,12 @@ val logConfig = LogConfig.Builder()
                 .logMode(LogMode.DATABASE)
                 .build()
 
-        SLog.init(this, logConfig)
+SLog.init(this, logConfig)
 
 // 自定义CrashHandler中
-    override fun uncaughtException(t: Thread?, e: Throwable?) {
-        SLog.crash(TAG, e)
-    }
+override fun uncaughtException(t: Thread?, e: Throwable?) {
+    SLog.crash(TAG, e)
+}
 ```
 
 Demo演示

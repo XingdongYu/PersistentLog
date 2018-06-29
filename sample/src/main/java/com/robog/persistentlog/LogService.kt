@@ -16,7 +16,7 @@ class LogService : Service() {
 
     companion object {
 
-        private val SERVICE_CHECK_INTERVAL = 60 * 60 * 1000L
+        private const val SERVICE_CHECK_INTERVAL = 60 * 60 * 1000L
 
         fun init(context: Context) {
             init(context, LogConfig.Builder().build())
