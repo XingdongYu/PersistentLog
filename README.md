@@ -1,13 +1,19 @@
-# PersistentLog
-持久化日志，可定期清除
+# 🚀PersistentLog
+持久化日志，用于服务器定期回捞，可定期清除。
 
 流程图
 ---
-```mermaid
-A(SLog.i)-->B|存入缓存|
-B-->C{缓存大于阈值?}
-C-->|是|D|存入数据库|-->Z(结束)
-C-->|否|Z(结束)
+```flow
+st=>start: SLog.i()
+e=>end: 结束
+op1=>operation: 存入缓存
+op2=>operation: 存入数据库
+op3=>operation: 清除缓存
+cond1=>condition: 缓存大于阈值?
+
+st->op1->cond1
+cond1(yes)->op2->op3->e
+cond1(no)->e
 ```
 
 使用
@@ -56,4 +62,4 @@ Demo演示
 
 TODO
 ---
--[]文件模式存储优化
+- [ ] 文件模式存储优化
