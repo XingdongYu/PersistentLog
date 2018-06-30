@@ -1,4 +1,4 @@
-package com.sunyard.loglib
+package com.robog.loglib
 
 /**
  * Created by yuxingdong on 2018/6/29.
@@ -13,6 +13,6 @@ data class LogBean(
         var next: LogBean?) {
 
     override fun toString(): String {
-        return "{$id} -> {$time} {$tag}: {$message}"
+        return "$id -> $time $tag: $message"
     }
 }

@@ -8,11 +8,9 @@ import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.view.View
-import android.widget.Switch
-import android.widget.TextView
 import com.robog.loglib.LogMode
 import com.robog.loglib.SLog
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.util.concurrent.Executors
 
@@ -22,11 +20,12 @@ import java.util.concurrent.Executors
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        private val TAG = "MainActivity"
+        private const val TAG = "MainActivity"
         private val EXECUTOR = Executors.newCachedThreadPool()
     }
 
     private var putCount = 0
+
     private val checkHandler = Handler()
     private val checkRunnable = object : Runnable {
         override fun run() {
@@ -38,9 +37,9 @@ class MainActivity : AppCompatActivity() {
             val fileLength = file.length()
 
             runOnUiThread {
-                findViewById<TextView>(R.id.tv_cache_size).text = "缓存数据: $cacheSize"
-                findViewById<TextView>(R.id.tv_db_size).text = "数据库数据: $dbSize"
-                findViewById<TextView>(R.id.tv_file_size).text = "文件大小: $fileLength"
+                tvCacheSize.text = String.format("缓存数据: %d", cacheSize)
+                tvDbSize.text = String.format("数据库数据: %d", dbSize)
+                tvFileSize.text = String.format("文件大小: %d", fileLength)
             }
             checkHandler.postDelayed(this, 1000)
         }
@@ -53,12 +52,27 @@ class MainActivity : AppCompatActivity() {
         checkSelfPermission()
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkHandler.post(checkRunnable)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        checkHandler.removeCallbacks(checkRunnable)
+    }
+
     private fun initView() {
-        (findViewById<View>(R.id.bt_switch) as Switch).setOnCheckedChangeListener { buttonView, isChecked ->
+        btSwitch.setOnCheckedChangeListener { _, isChecked ->
             EXECUTOR.execute({
                 SLog.changeMode(if (isChecked) LogMode.FILE else LogMode.DATABASE)
             })
         }
+
+        btClear.setOnClickListener { clear() }
+        btLog.setOnClickListener { log() }
+        btFlush.setOnClickListener { flush() }
+        btCrash.setOnClickListener { makeCrash() }
     }
 
     private fun checkSelfPermission() {
@@ -73,17 +87,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    fun clear(view: View) {
+    fun clear() {
         putCount = 0
-        (findViewById<View>(R.id.tv_put_size) as TextView).text = "已存入: $putCount"
+        tvPutSize.text = String.format("已存入: %d", putCount)
         SLog.clearDb()
         SLog.deleteFile()
     }
 
-    fun log(view: View) {
+    fun log() {
         putCount += 400
-        (findViewById<View>(R.id.tv_put_size) as TextView).text = "已存入: $putCount"
+        tvPutSize.text = String.format("已存入: %d", putCount)
         EXECUTOR.execute({
             for (i in 0..99) {
                 LogThread().start()
@@ -92,11 +105,11 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    fun flush(view: View) {
+    fun flush() {
         SLog.flush()
     }
 
-    fun makeCrash(view: View) {
+    fun makeCrash() {
         throw RuntimeException("Exception by user!")
     }
 
@@ -109,13 +122,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        checkHandler.post(checkRunnable)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        checkHandler.removeCallbacks(checkRunnable)
-    }
 }

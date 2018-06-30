@@ -1,9 +1,9 @@
-package com.sunyard.loglib
+package com.robog.loglib
 
 import android.content.Context
 import android.os.Process
-import com.sunyard.loglib.database.LogBeanDao
-import com.sunyard.loglib.database.LogBeanDaoImpl
+import com.robog.loglib.database.LogBeanDao
+import com.robog.loglib.database.LogBeanDaoImpl
 
 /**
  * Created by yuxingdong on 2018/6/29.

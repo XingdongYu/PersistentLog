@@ -14,6 +14,15 @@ buildscript {
     }
 }
 
+ext{
+    compileSdkVersion = 27
+    minSdkVersion = 19
+    targetSdkVersion = 27
+    supportVersion = '27.1.1'
+    mockitoVersion = '2.7.19'
+    espressoVersion = '3.0.2'
+}
+
 allprojects {
     repositories {
         google()

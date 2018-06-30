@@ -19,7 +19,7 @@ class LogService : Service() {
         private const val SERVICE_CHECK_INTERVAL = 60 * 60 * 1000L
 
         fun init(context: Context) {
-            init(context, LogConfig.Builder().build())
+            init(context, LogConfig())
         }
 
         fun init(context: Context, logConfig: LogConfig) {

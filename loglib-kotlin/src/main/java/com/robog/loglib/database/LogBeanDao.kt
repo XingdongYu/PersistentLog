@@ -1,13 +1,13 @@
-package com.sunyard.loglib.database
+package com.robog.loglib.database
 
-import com.sunyard.loglib.LogBean
+import com.robog.loglib.LogBean
 
 /**
  * Created by yuxingdong on 2018/6/29.
  */
 interface LogBeanDao {
 
-    val all: List<LogBean>
+    fun getAll(): List<LogBean>
 
     fun save(logBeans: List<LogBean>)
 

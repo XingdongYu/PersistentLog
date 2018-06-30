@@ -1,11 +1,11 @@
-package com.sunyard.loglib
+package com.robog.loglib
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
-import com.sunyard.loglib.FileLog.Companion.FILE_PATH
-import com.sunyard.loglib.Util.wrapLogBean
-import com.sunyard.loglib.database.LogBeanDaoImpl
+import com.robog.loglib.FileLog.Companion.FILE_PATH
+import com.robog.loglib.Util.wrapLogBean
+import com.robog.loglib.database.LogBeanDaoImpl
 import java.io.File
 
 /**
@@ -149,7 +149,7 @@ object SLog {
             throw RuntimeException("Please init SLog first!")
         }
         val logBeanDao = LogBeanDaoImpl.getInstance(context!!.applicationContext)
-        return logBeanDao.all
+        return logBeanDao.getAll()
     }
 
     /**
@@ -187,7 +187,7 @@ object SLog {
         logStrategy = null
     }
 
-    fun crash(tag: String, t: Throwable) {
+    fun crash(tag: String, t: Throwable?) {
         val logBean = wrapLogBean(tag, t.toString(), EXCEPTION)
         if (logStrategy == null) {
             throw RuntimeException("Please init SLog first!")

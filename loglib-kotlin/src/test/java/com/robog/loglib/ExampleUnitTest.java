@@ -1,4 +1,4 @@
-package com.sunyard.loglib;
+package com.robog.loglib;
 
 import org.junit.Test;
 
