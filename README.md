@@ -5,7 +5,7 @@
 ---
 ```kotlin
 val logConfig = LogConfig(
-		// 是否调试模式
+        // 是否调试模式
         debug = false,
         // 设备数据
         deviceInfo = "Device Info",
