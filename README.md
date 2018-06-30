@@ -3,22 +3,21 @@
 
 使用
 ---
-```java
-val logConfig = LogConfig.Builder()
-                // 是否调试模式
-                .debug(false)
-                // 设备数据
-                .deviceInfo("Device Info")
-                // 数据库检查周期
-                .dbCheckInterval(4000)
-                // 数据库容量
-                .dbThreshold(1000)
-                // 缓存大小
-                .cacheSize(50)
-                // 日志存储方式
-                .logMode(LogMode.DATABASE)
-                .build()
-
+```kotlin
+val logConfig = LogConfig(
+		// 是否调试模式
+        debug = false,
+        // 设备数据
+        deviceInfo = "Device Info",
+        // 数据库检查周期
+        dbCheckInterval = 4000,
+        // 数据库容量
+        dbThreshold = 1000,
+        // 缓存大小
+        cacheSize = 50,
+        // 日志存储方式
+        logMode = LogMode.DATABASE
+)
 SLog.init(this, logConfig)
 
 // 自定义CrashHandler中
