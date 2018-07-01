@@ -1,6 +1,5 @@
 package com.robog.loglib
 
-import android.content.Context
 import android.os.Environment
 import android.util.Log
 import org.json.JSONArray
@@ -24,30 +23,23 @@ internal class FileLog : AbstractLog(), Savable {
         fun create(): FileLog = instance ?: FileLog().also { instance = it }
     }
 
-    override fun save(logBeans: List<LogBean>) {
-        // 原有内容
-        var existContent: String
-        val logContent = StringBuilder()
+    init {
+        LogCache.get().savable = this
+    }
 
+    override fun save(logBeans: List<LogBean>) {
+
+        val logContent = StringBuilder()
         try {
 
-            val f = createFile(logBeans)
-            f.useLines { lines ->
-                lines.forEach {
-                    logContent.append(it)
-                }
-            }
-
+            val file = createFile(logBeans)
             val jsonArray = buildJSONArray(logBeans)
             logContent.append(jsonArray.toString().substring(1))
             var writeData = logContent.toString()
             if (!writeData.startsWith("[")) {
                 writeData = "[$writeData"
             }
-
-            val output = BufferedWriter(FileWriter(f))
-            output.write(writeData)
-            output.close()
+            file.appendText(writeData)
         } catch (e: Exception) {
             e.printStackTrace()
 

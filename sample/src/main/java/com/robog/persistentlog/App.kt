@@ -21,7 +21,7 @@ class App : Application() {
                 dbCheckInterval = 4000,
                 dbThreshold = 1000,
                 cacheSize = 50,
-                logMode = LogMode.DATABASE
+                logMode = LogMode.FILE
         )
 
         SLog.init(this, logConfig)

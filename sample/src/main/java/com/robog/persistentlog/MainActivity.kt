@@ -87,29 +87,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun clear() {
+    private fun clear() {
         putCount = 0
         tvPutSize.text = String.format("已存入: %d", putCount)
         SLog.clearDb()
         SLog.deleteFile()
     }
 
-    fun log() {
+    private fun log() {
         putCount += 400
         tvPutSize.text = String.format("已存入: %d", putCount)
         EXECUTOR.execute({
             for (i in 0..99) {
                 LogThread().start()
             }
-        }
-        )
+        })
     }
 
-    fun flush() {
+    private fun flush() {
         SLog.flush()
     }
 
-    fun makeCrash() {
+    private fun makeCrash() {
         throw RuntimeException("Exception by user!")
     }
 
