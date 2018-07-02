@@ -14,22 +14,45 @@ import java.io.File
 @SuppressLint("StaticFieldLeak")
 object SLog {
 
-    val TAG = "SLog"
+    private const val TAG = "SLog"
     private var logStrategy: LogStrategy? = null
     private var context: Context? = null
 
-    private val EXCEPTION = -1
-    private val VERBOSE = 2
-    private val DEBUG = 3
-    private val INFO = 4
-    private val WARN = 5
-    private val ERROR = 6
+    private const val EXCEPTION = -1
+    private const val VERBOSE = 2
+    private const val DEBUG = 3
+    private const val INFO = 4
+    private const val WARN = 5
+    private const val ERROR = 6
 
+    /**
+     * 是否调试模式
+     */
     var debug: Boolean = false
+
+    /**
+     * 设备标识
+     */
     var deviceInfo: String = ""
+
+    /**
+     * 数据库检查周期
+     */
     var dbCheckInterval: Long = 0
+
+    /**
+     * 数据库容量阈值
+     */
     var dbThreshold: Int = 0
+
+    /**
+     * Log存储模式
+     */
     var logMode: LogMode = LogMode.DATABASE
+
+    /**
+     * 缓存大小
+     */
     var cacheSize: Int = 0
 
 

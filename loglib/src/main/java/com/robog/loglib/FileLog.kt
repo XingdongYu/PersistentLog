@@ -9,14 +9,17 @@ import java.io.*
 
 /**
  * Created by yuxingdong on 2018/6/29.
+ * <p>
+ * 将Log对象存入文件。
+ * </p>
  */
 internal class FileLog : AbstractLog(), Savable {
 
     companion object {
 
-        private val TAG = "FileLog"
+        private const val TAG = "FileLog"
+        private const val FILE_SIZE = 5 * 1024 * 1024
         private var instance: FileLog? = null
-        private val FILE_SIZE = 5 * 1024 * 1024
         val FILE_PATH = (Environment.getExternalStorageDirectory().absolutePath
                 + File.separator + "slog.txt")
 
@@ -30,16 +33,20 @@ internal class FileLog : AbstractLog(), Savable {
     override fun save(logBeans: List<LogBean>) {
 
         val logContent = StringBuilder()
-        try {
 
+        try {
             val file = createFile(logBeans)
+            file.readLines().forEach {
+                logContent.append(it.replace("]", ","))
+            }
+
             val jsonArray = buildJSONArray(logBeans)
             logContent.append(jsonArray.toString().substring(1))
             var writeData = logContent.toString()
             if (!writeData.startsWith("[")) {
                 writeData = "[$writeData"
             }
-            file.appendText(writeData)
+            file.writeText(writeData)
         } catch (e: Exception) {
             e.printStackTrace()
 
@@ -51,10 +58,8 @@ internal class FileLog : AbstractLog(), Savable {
         val f = File(FILE_PATH)
         if (f.exists()) {
             val length = f.length()
-            Log.d(TAG, "文件存在:$length")
             if (length > FILE_SIZE) {
                 val deleteSuccess = f.delete()
-                Log.d(TAG, "超过大小删除 -> $deleteSuccess")
                 //先删除，再递归写入
                 save(logBeans)
             }
@@ -83,6 +88,6 @@ internal class FileLog : AbstractLog(), Savable {
     }
 
     override fun destroy() {
-
+        instance = null
     }
 }

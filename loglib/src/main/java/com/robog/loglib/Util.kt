@@ -14,6 +14,7 @@ object Util {
         val logBean = LogBeanPool.get()
         logBean.priority = priority
         logBean.tag = tag
+        // TODO: 2018/6/21 message加密
         logBean.message = msg
         logBean.time = logTime()
         logBean.stackTrace = stackTrace()

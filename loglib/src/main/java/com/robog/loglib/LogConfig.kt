@@ -12,6 +12,9 @@ class LogConfig(
         val dbCheckInterval: Long = DB_CHECK_INTERVAL)
 {
     companion object {
+        /**
+         * 以下数据默认值都是瞎定的
+         */
         private const val DB_THRESHOLD = 1000
         private const val MAX_CACHE_SIZE = 50
         private const val DB_CHECK_INTERVAL = 60 * 60 * 1000L

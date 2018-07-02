@@ -7,6 +7,9 @@ import com.robog.loglib.database.LogBeanDaoImpl
 
 /**
  * Created by yuxingdong on 2018/6/29.
+ * <p>
+ * 将Log对象存入数据库，并开启数据库监测，定期检查数据库数据数量是否达到上限。
+ * </p>
  */
 internal class DatabaseLog private constructor(
         context: Context

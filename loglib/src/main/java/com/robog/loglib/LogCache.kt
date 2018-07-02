@@ -31,10 +31,15 @@ internal class LogCache {
     }
 
     private fun saveAndClean() {
+        // 1.保存
         savable.save(cache)
+        // 2.清除缓存
         clear()
     }
 
+    /**
+     * 清除缓存，回收LogBean
+     */
     private fun clear() {
         if (cache.size > 0) {
             cache.forEach {

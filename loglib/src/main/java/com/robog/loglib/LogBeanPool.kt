@@ -8,7 +8,7 @@ object LogBeanPool {
     private val poolSync = Any()
     private var pool: LogBean? = null
     private var poolSize = 0
-    private val MAX_POOL_SIZE = 60
+    private const val MAX_POOL_SIZE = 100
 
     fun get(): LogBean {
         synchronized(poolSync) {

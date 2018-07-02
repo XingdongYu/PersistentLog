@@ -1,1 +1,1 @@
-include ':sample', ':loglib-java', ':loglib-kotlin'
+include ':sample', ':loglib'

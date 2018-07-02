@@ -69,10 +69,30 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
-        btClear.setOnClickListener { clear() }
-        btLog.setOnClickListener { log() }
-        btFlush.setOnClickListener { flush() }
-        btCrash.setOnClickListener { makeCrash() }
+        btClear.setOnClickListener {
+            putCount = 0
+            tvPutSize.text = String.format("已存入: %d", putCount)
+            SLog.clearDb()
+            SLog.deleteFile()
+        }
+
+        btLog.setOnClickListener {
+            putCount += 400
+            tvPutSize.text = String.format("已存入: %d", putCount)
+            EXECUTOR.execute({
+                for (i in 0..99) {
+                    LogThread().start()
+                }
+            })
+        }
+
+        btFlush.setOnClickListener {
+            SLog.flush()
+        }
+
+        btCrash.setOnClickListener {
+            throw RuntimeException("Exception by user!")
+        }
     }
 
     private fun checkSelfPermission() {
@@ -87,32 +107,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun clear() {
-        putCount = 0
-        tvPutSize.text = String.format("已存入: %d", putCount)
-        SLog.clearDb()
-        SLog.deleteFile()
-    }
-
-    private fun log() {
-        putCount += 400
-        tvPutSize.text = String.format("已存入: %d", putCount)
-        EXECUTOR.execute({
-            for (i in 0..99) {
-                LogThread().start()
-            }
-        })
-    }
-
-    private fun flush() {
-        SLog.flush()
-    }
-
-    private fun makeCrash() {
-        throw RuntimeException("Exception by user!")
-    }
-
-    private class LogThread : Thread() {
+    internal class LogThread : Thread() {
 
         override fun run() {
             for (i in 0..3) {
