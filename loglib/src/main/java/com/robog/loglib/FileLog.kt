@@ -1,7 +1,9 @@
 package com.robog.loglib
 
 import android.os.Environment
+import android.text.TextUtils
 import android.util.Log
+import com.robog.loglib.Util.jsonToLogBean
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -18,7 +20,7 @@ internal class FileLog : AbstractLog(), Savable {
     companion object {
 
         private const val TAG = "FileLog"
-        private const val FILE_SIZE = 5 * 1024 * 1024
+        private const val FILE_SIZE = 1000
         private var instance: FileLog? = null
         val FILE_PATH = (Environment.getExternalStorageDirectory().absolutePath
                 + File.separator + "slog.txt")
@@ -30,22 +32,35 @@ internal class FileLog : AbstractLog(), Savable {
         LogCache.get().savable = this
     }
 
+    @Synchronized
     override fun save(logBeans: List<LogBean>) {
-
         val logContent = StringBuilder()
-
         try {
-            val file = createFile(logBeans)
-            file.readLines().forEach {
-                logContent.append(it.replace("]", ","))
+
+            val file = createFile()
+            val readText = file.readText()
+            val allBeanList = ArrayList<LogBean>()
+
+            if (!TextUtils.isEmpty(readText)) {
+
+                val formerJsonArray = JSONArray(readText)
+                val formerBeanList = jsonToLogBean(formerJsonArray)
+
+                if (formerBeanList.size > FILE_SIZE) {
+                    for (i in 500 until formerBeanList.size) {
+                        allBeanList.add(formerBeanList[i])
+                    }
+                } else{
+                    allBeanList.addAll(formerBeanList)
+                }
             }
 
-            val jsonArray = buildJSONArray(logBeans)
-            logContent.append(jsonArray.toString().substring(1))
-            var writeData = logContent.toString()
-            if (!writeData.startsWith("[")) {
-                writeData = "[$writeData"
-            }
+            allBeanList.addAll(logBeans)
+
+            val jsonArray = buildJSONArray(allBeanList)
+            logContent.append(jsonArray.toString())
+            val writeData = logContent.toString()
+
             file.writeText(writeData)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -54,19 +69,10 @@ internal class FileLog : AbstractLog(), Savable {
     }
 
     @Throws(IOException::class)
-    private fun createFile(logBeans: List<LogBean>): File {
+    private fun createFile(): File {
         val f = File(FILE_PATH)
-        if (f.exists()) {
-            val length = f.length()
-            if (length > FILE_SIZE) {
-                val deleteSuccess = f.delete()
-                //先删除，再递归写入
-                save(logBeans)
-            }
-
-        } else {
-            val createSuccess = f.createNewFile()// 不存在则创建
-            Log.d(TAG, "文件不存在, 创建 -> $createSuccess")
+        if (!f.exists()) {
+            f.createNewFile()
         }
         return f
     }

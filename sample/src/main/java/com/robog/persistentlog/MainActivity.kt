@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
+import android.os.Looper
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private var putCount = 0
 
-    private val checkHandler = Handler()
+    private lateinit var checkHandler: Handler
     private val checkRunnable = object : Runnable {
         override fun run() {
             val cacheSize = SLog.cacheSize()
@@ -54,7 +55,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        checkHandler.post(checkRunnable)
+        EXECUTOR.execute({
+            Looper.prepare()
+            checkHandler = Handler()
+            checkHandler.post(checkRunnable)
+            Looper.loop()
+        })
     }
 
     override fun onDestroy() {
