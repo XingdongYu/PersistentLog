@@ -182,8 +182,10 @@ object SLog {
         if (context == null) {
             throw RuntimeException("Please init SLog first!")
         }
-        val logBeanDao = LogBeanDaoImpl.getInstance(context!!.applicationContext)
-        logBeanDao.deleteAll()
+        work {
+            val logBeanDao = LogBeanDaoImpl.getInstance(context!!.applicationContext)
+            logBeanDao.deleteAll()
+        }
     }
 
     /**
@@ -192,7 +194,9 @@ object SLog {
     fun deleteFile() {
         val file = File(FILE_PATH)
         if (file.exists()) {
-            file.delete()
+            work {
+                file.delete()
+            }
         }
     }
 
@@ -200,7 +204,9 @@ object SLog {
         if (logMode != mode) {
             logMode = mode
             destroy()
-            logStrategy = if (mode == LogMode.DATABASE) DatabaseLog.create(context!!.applicationContext) else FileLog.create()
+            logStrategy =
+                    if (mode == LogMode.DATABASE) DatabaseLog.create(context!!.applicationContext)
+                    else FileLog.create()
         }
     }
 
@@ -221,11 +227,13 @@ object SLog {
 
     private fun print(tag: String, msg: String, priority: Int) {
         synchronized(SLog::class.java) {
-            val logBean = wrapLogBean(tag, msg, priority)
-            if (logStrategy == null) {
-                throw RuntimeException("Please init SLog first!")
+            work {
+                val logBean = wrapLogBean(tag, msg, priority)
+                if (logStrategy == null) {
+                    throw RuntimeException("Please init SLog first!")
+                }
+                logStrategy!!.logAsync(logBean)
             }
-            logStrategy!!.logAsync(logBean)
         }
     }
 

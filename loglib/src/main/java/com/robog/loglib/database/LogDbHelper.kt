@@ -23,13 +23,7 @@ internal class LogDbHelper(
         internal const val COLUMN_TIME = "time"
         internal const val COLUMN_STACK_TRACE = "stack_trace"
         private const val SQL_CREATE_ENTRIES =
-                """CREATE TABLE $TABLE_NAME
-                    |($COLUMN_ID INTEGER PRIMARY KEY,
-                    |$COLUMN_PRIORITY TEXT,
-                    |$COLUMN_TAG TEXT,
-                    |$COLUMN_MESSAGE TEXT,
-                    |$COLUMN_TIME TEXT,
-                    |$COLUMN_STACK_TRACE TEXT)"""
+                """CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_PRIORITY TEXT, $COLUMN_TAG TEXT, $COLUMN_MESSAGE TEXT, $COLUMN_TIME TEXT, $COLUMN_STACK_TRACE TEXT)"""
 
     }
 
